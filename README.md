@@ -6,3 +6,9 @@ Webpack SASS Starter
 ```
 npm install
 ```
+
+## Start server
+
+```
+npm run start
+```
