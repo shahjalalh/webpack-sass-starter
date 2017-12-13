@@ -12,7 +12,7 @@ module.exports = {
         filename: 'foo.bundle.js'
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
+        new webpack.optimize.CommonsChunkPlugin('vendor', 'static/js/vendor.bundle.js'),
     ],
     module: {
         rules: [{
