@@ -1,11 +1,19 @@
 var path = require('path');
 
 module.exports = {
-    entry: './foo.js',
+    entry: {
+        app: './client/Client.jsx',
+        vendor: [
+            'jquery', 'lodash', 'bootstrap',
+        ],
+    },
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'foo.bundle.js'
     },
+    plugins: [
+        new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
+    ],
     module: {
         rules: [{
             test: /\.scss$/,
@@ -23,8 +31,10 @@ module.exports = {
         }]
     },
     devServer: {
+        inline: true,
+        port: 9000,
         contentBase: path.join(__dirname, "dist"),
-        compress: true,
-        port: 9000
-    }
+        historyApiFallback: true,
+    },
+    devtool: 'source-map',
 };
