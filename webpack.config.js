@@ -1,4 +1,5 @@
 var path = require('path');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
     entry: {
@@ -12,6 +13,9 @@ module.exports = {
         filename: 'foo.bundle.js'
     },
     plugins: [
+        new ExtractTextPlugin('static/css/vendor.bundle.css', {
+            allChunks: true
+        }),
         new webpack.optimize.CommonsChunkPlugin('vendor', 'static/js/vendor.bundle.js'),
     ],
     module: {
