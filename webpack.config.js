@@ -5,7 +5,7 @@ module.exports = {
     entry: {
         app: './client/Client.jsx',
         vendor: [
-            'jquery', 'lodash', 'bootstrap',
+            'jquery', 'lodash', 'moment', 'bootstrap',
         ],
     },
     output: {
