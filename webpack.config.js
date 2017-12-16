@@ -1,44 +1,70 @@
 var path = require('path');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
+const HTMLWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const webpack = require('webpack');
+
 
 module.exports = {
     entry: {
-        app: './client/Client.jsx',
-        vendor: [
-            'jquery', 'lodash', 'moment', 'bootstrap',
-        ],
+        app: path.resolve(__dirname, './static/js/src/main.js'),
+
     },
     output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'foo.bundle.js'
+        path: path.resolve(__dirname, './static/js/'),
+        filename: 'bundle.js',
+        chunkFilename: '[id].[chunkhash].js'
     },
+    module: {
+        rules: [
+            // babel - es6 code is converted to es5
+            {
+                test: /\.js$/,
+                exclude: /(node_modules)/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['env', 'es2015', 'react'],
+                        plugins: [require('babel-plugin-transform-object-rest-spread')]
+                    }
+                }
+            },
+
+            // use to extract css from js file
+            {
+                test: /\.scss$/,
+                exclude: /node_modules/,
+                use: ExtractTextPlugin.extract({
+                    use: ["css-loader", "sass-loader"],
+                    fallback: "style-loader",
+                    publicPath: path.resolve(__dirname, '/static/css')
+
+                })
+            }
+
+        ]
+    },
+
     plugins: [
-        new ExtractTextPlugin('static/css/vendor.bundle.css', {
+
+
+        new ExtractTextPlugin({
+            filename: 'styles.css',
+            disable: false,
             allChunks: true
         }),
-        new webpack.optimize.CommonsChunkPlugin('vendor', 'static/js/vendor.bundle.js'),
-    ],
-    module: {
-        rules: [{
-            test: /\.scss$/,
-            exclude: /node_modules/,
-            use: [{
-                loader: "style-loader"
-            }, {
-                loader: "css-loader"
-            }, {
-                loader: "sass-loader",
-                options: {
-                    includePaths: ["absolute/path/a", "absolute/path/b"]
-                }
-            }]
-        }]
-    },
-    devServer: {
-        inline: true,
-        port: 9000,
-        contentBase: path.join(__dirname, "dist"),
-        historyApiFallback: true,
-    },
-    devtool: 'source-map',
+
+        //reduce react size
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify('production')
+            }
+        }),
+
+
+        new webpack.optimize.AggressiveMergingPlugin()
+
+    ]
+
 };
