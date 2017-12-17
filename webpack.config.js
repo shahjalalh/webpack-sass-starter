@@ -62,6 +62,12 @@ module.exports = {
             }
         }),
 
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                screw_ie8: false,
+                warnings: false
+            }
+        }),
 
         new webpack.optimize.AggressiveMergingPlugin()
 
