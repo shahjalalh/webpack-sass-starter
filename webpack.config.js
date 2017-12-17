@@ -38,7 +38,7 @@ module.exports = {
                 use: ExtractTextPlugin.extract({
                     use: ["css-loader", "sass-loader"],
                     fallback: "style-loader",
-                    publicPath: path.resolve(__dirname, '/static/css')
+                    publicPath: path.resolve(__dirname, '/static/css/')
 
                 })
             }
